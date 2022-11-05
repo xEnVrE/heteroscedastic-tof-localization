@@ -11,7 +11,6 @@ import math
 import numpy
 from simulator.sensor import Sensor
 from simulator.varying_noise import VaryingNoise
-from simulator.viewer import Viewer
 
 
 class Simulator():
@@ -174,6 +173,7 @@ class Simulator():
 
 
 def main():
+    from simulator.viewer import Viewer
 
     # Setup simulator
     dt = 1.0 / 30.0
