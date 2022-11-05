@@ -74,6 +74,6 @@ class MeasurementModel(torchfilter.base.KalmanFilterMeasurementModel):
         # Rs = torch.exp(self.R(self.state_feature(states / 2.0)).reshape(N, self.measurement_dim, self.measurement_dim))
         # Rs = self.R[None, :, :].expand(N, self.measurement_dim, self.measurement_dim)
         test = Rs @ Rs.transpose(-1, -2)
-        test_chol = torch.cholesky(test)
+        test_chol = torch.linalg.cholesky(test)
 
         return measurements, Rs

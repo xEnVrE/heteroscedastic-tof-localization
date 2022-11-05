@@ -24,7 +24,6 @@ class Trainer():
         """Constructor."""
 
         torch.manual_seed(0)
-        torch.set_deterministic(True)
 
         # Set requested number of threads
         torch.set_num_threads(options.num_thread)

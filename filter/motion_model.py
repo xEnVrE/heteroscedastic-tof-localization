@@ -56,6 +56,6 @@ class MotionModel(torchfilter.base.DynamicsModel):
         # Qs = self.Q[None, :, :].expand(N, state_dim, state_dim)
         Qs = torch.diag_embed(torch.exp(self.Q(self.state_feature(initial_states / 2.0))) + torch.Tensor([.001] * self.state_dim))
         test = Qs @ Qs.transpose(-1, -2)
-        test_chol = torch.cholesky(test)
+        test_chol = torch.linalg.cholesky(test)
         # Qs = self.Q(self.state_feature(initial_states / 2.0)).reshape((N, self.state_dim, self.state_dim))
         return predicted_states, Qs
