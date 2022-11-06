@@ -12,6 +12,7 @@ import pickle
 import os
 import torch
 import torch.nn.functional as F
+from datetime import datetime
 from filter.motion_model import MotionModel
 from filter.measurement_model import MeasurementModel
 from filter.ekf import ExtendedKalmanFilter
@@ -50,6 +51,10 @@ class Trainer():
             measurement_model = self.measurement_model
         ).to(device = self.device)
 
+        # Storage for output
+        self.output_dir = './train_' + datetime.now().strftime('%d_%m_%Y_%H_%M_%S')
+        os.makedirs(self.output_dir, exist_ok = False)
+
 
     def train(self, subsequence_length, epochs, initial_cov_scale = 0.1, recover_from = None):
         """Training procedure."""
@@ -57,6 +62,7 @@ class Trainer():
         # if recover_from is not None:
         #     self.buddy.load_checkpoint(label = recover_from)
 
+        self.loss_history = []
         self.filter_model.train()
         self.optimizer = torch.optim.Adam(self.filter_model.parameters())
 
@@ -69,7 +75,7 @@ class Trainer():
 
         initial_covariance = (torch.eye(self.filter_model.state_dim) * initial_cov_scale).to(self.device)
 
-        for _ in range(epochs):
+        for epoch_number in range(epochs):
             assert initial_covariance.shape == (self.filter_model.state_dim, self.filter_model.state_dim)
             assert self.filter_model.training, "Model needs to be set to train mode"
 
@@ -117,7 +123,22 @@ class Trainer():
 
 
             epoch_loss /= len(dataloader)
+            self.loss_history.append(epoch_loss)
+            self.save_epoch(epoch_number)
             print("(train_filter) Epoch training loss: ", epoch_loss)
+
+
+    def save_epoch(self, epoch):
+        """Save the current epoch."""
+
+        output_dictionary = {}
+        output_dictionary['epoch'] = epoch
+        output_dictionary['output_dir'] = self.output_dir
+        output_dictionary['filter'] = self.filter_model.state_dict()
+        output_dictionary['optimizer'] = self.optimizer.state_dict()
+        output_dictionary['loss_history'] = self.loss_history
+
+        torch.save(output_dictionary, self.output_dir + '/' + str(epoch).zfill(4) + '.pth')
 
 
 def main():
@@ -131,9 +152,7 @@ def main():
     trainer.train(4, 5)
     trainer.train(8, 5)
     trainer.train(16, 5)
-    # trainer.train(32, 5, recover_from = 'sub_16')
-    # trainer.train(64, 5)
-    # trainer.train(128, 5)
+
 
 if __name__ == '__main__':
     main()
