@@ -80,6 +80,7 @@ class Trainer():
         #     self.buddy.load_checkpoint(label = recover_from)
 
         self.filter_model.train()
+        self.optimizer = torch.optim.Adam(self.filter_model.parameters())
 
         dataloader = torch.utils.data.DataLoader\
         (
@@ -130,12 +131,9 @@ class Trainer():
                 assert state_predictions.shape == (T - 1, B, state_dim)
 
                 loss = F.mse_loss(state_predictions, states[1:])
-                optimizer = torch.optim.Adam(self.filter_model.parameters())
-                optimizer.param_groups[0]["lr"] = 0.0005
-                optimizer.zero_grad()
+                self.optimizer.zero_grad()
                 loss.backward(retain_graph = False)
-                optimizer.step()
-
+                self.optimizer.step()
 
                 epoch_loss += loss.detach().cpu().numpy()
 
