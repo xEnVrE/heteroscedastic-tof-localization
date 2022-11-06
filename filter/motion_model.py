@@ -23,7 +23,6 @@ class MotionModel(nn.Module):
 
         # Fixed parameters
         self.dt = nn.Parameter(torch.FloatTensor([sampling_time]), requires_grad = False)
-        self.eps = torch.Tensor([.001] * self.state_dim).to(device)
 
         # Trainable parameters
         units = 64
@@ -52,7 +51,7 @@ class MotionModel(nn.Module):
         predicted_states[:, 0 : 2] = initial_states[:, 0 : 2] + initial_states[:, 2 :] * self.dt
         predicted_states[:, 2 :] = initial_states[:, 2 :]
 
-        Qsqrt = torch.diag_embed(torch.exp(self.Q(self.state_feature(initial_states / 2.0))) + self.eps)
+        Qsqrt = torch.diag_embed(self.Q(self.state_feature(initial_states / 2.0)))
         return predicted_states, Qsqrt
 
 

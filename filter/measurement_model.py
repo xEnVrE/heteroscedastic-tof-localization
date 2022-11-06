@@ -21,7 +21,6 @@ class MeasurementModel(nn.Module):
 
         self.state_dim = 4
         self.measurement_dim = 4
-        self.eps = torch.Tensor([.001] * self.measurement_dim).to(device)
         self.batch_size = batch_size
 
         # Trainable parameters
@@ -64,7 +63,7 @@ class MeasurementModel(nn.Module):
         measurements[:, 2] = torch.linalg.norm(position - sensor_2, dim = 1)
         measurements[:, 3] = torch.linalg.norm(position - sensor_3, dim = 1)
 
-        Rs = torch.diag_embed(torch.exp(self.R(self.state_feature(states / 2.0))) + self.eps)
+        Rs = torch.diag_embed(self.R(self.state_feature(states / 2.0)))
 
         return measurements, Rs
 
