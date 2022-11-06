@@ -10,6 +10,7 @@ setup(
     license="",
     packages=find_packages(),
     install_requires=[
+        "matplotlib",
         "mock"
     ],
 )
