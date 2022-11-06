@@ -24,7 +24,7 @@ class Trainer():
     def __init__(self, options):
         """Constructor."""
 
-        self.device = torch.device("cpu")
+        self.device = torch.device('cpu')
         self.batch_size = 32
         torch.manual_seed(0)
 
@@ -124,11 +124,11 @@ class Trainer():
 
             epoch_loss /= len(dataloader)
             self.loss_history.append(epoch_loss)
-            self.save_epoch(epoch_number)
-            print("(train_filter) Epoch training loss: ", epoch_loss)
+            self.save_epoch(epoch_number, subsequence_length)
+            print('(train_filter) Epoch training loss: ', epoch_loss)
 
 
-    def save_epoch(self, epoch):
+    def save_epoch(self, epoch_number, subsequence_length):
         """Save the current epoch."""
 
         output_dictionary = {}
@@ -138,7 +138,7 @@ class Trainer():
         output_dictionary['optimizer'] = self.optimizer.state_dict()
         output_dictionary['loss_history'] = self.loss_history
 
-        torch.save(output_dictionary, self.output_dir + '/' + str(epoch).zfill(4) + '.pth')
+        torch.save(output_dictionary, self.output_dir + '/' + str(subsequence_length) + '_' + str(epoch).zfill(4) + '.pth')
 
 
 def main():
