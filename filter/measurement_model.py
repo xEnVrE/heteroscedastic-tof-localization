@@ -40,7 +40,7 @@ class MeasurementModel(nn.Module):
         self.sensor_1 = torch.Tensor([0.0, 2.0]).to(device)
         self.sensor_2 = torch.Tensor([2.0, 0.0]).to(device)
         self.sensor_3 = torch.Tensor([2.0, 2.0]).to(device)
-        self.zeros. = torch.zeros(self.measurement_dim).to(device)
+        self.zeros = torch.zeros(self.measurement_dim).to(device)
 
 
     def forward(self, *, states):
