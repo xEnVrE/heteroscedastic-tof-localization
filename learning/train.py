@@ -37,25 +37,8 @@ class Trainer():
         self.train_set = data['train_set']
 
         # Create folders for output
-        # checkpoint_dir = './output_data/checkpoint'
-        # metadata_dir = './output_data/metadata'
-        # log_dir = './output_data/log'
-        # self.parameters_dir = './output_data/parameters'
-        # os.makedirs(checkpoint_dir, exist_ok = True)
-        # os.makedirs(metadata_dir, exist_ok = True)
-        # os.makedirs(log_dir, exist_ok = True)
-        # os.makedirs(self.parameters_dir, exist_ok = True)
-
-        # Setup training helper
-        # self.buddy = fannypack.utils.Buddy\
-        # (
-        #     experiment_name = 'train',
-        #     checkpoint_dir = checkpoint_dir,
-        #     metadata_dir = metadata_dir,
-        #     log_dir = log_dir,
-        #     optimizer_checkpoint_interval = 0,
-        #     cpu_only = True
-        # )
+        checkpoint_dir = './output_data/checkpoint'
+        os.makedirs(checkpoint_dir, exist_ok = True)
 
         # Filter initialization
         dt = 1.0 / 30.0
@@ -66,11 +49,6 @@ class Trainer():
             motion_model = self.motion_model,
             measurement_model = self.measurement_model
         ).to(device = self.device)
-        # self.buddy.attach_model(self.filter_model)
-
-        self.parameters = {}
-        self.parameters['Q'] = []
-        self.parameters['R'] = []
 
 
     def train(self, subsequence_length, epochs, initial_cov_scale = 0.1, recover_from = None):
