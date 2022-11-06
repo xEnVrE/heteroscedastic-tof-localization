@@ -139,7 +139,7 @@ class Trainer():
         output_dictionary['optimizer'] = self.optimizer.state_dict()
         output_dictionary['loss_history'] = self.loss_history
 
-        torch.save(output_dictionary, self.output_dir + '/' + str(subsequence_length) + '_' + str(epoch).zfill(4) + '.pth')
+        torch.save(output_dictionary, self.output_dir + '/' + str(subsequence_length) + '_' + str(epoch_number).zfill(4) + '.pth')
 
 
 def main():
