@@ -132,7 +132,8 @@ class Trainer():
         """Save the current epoch."""
 
         output_dictionary = {}
-        output_dictionary['epoch'] = epoch
+        output_dictionary['epoch_number'] = epoch_number
+        output_dictionary['subsequence_length'] = subsequence_length
         output_dictionary['output_dir'] = self.output_dir
         output_dictionary['filter'] = self.filter_model.state_dict()
         output_dictionary['optimizer'] = self.optimizer.state_dict()
